@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 import { api } from '../shared/api';
 import { useAsync } from '../shared/hooks/useAsync';

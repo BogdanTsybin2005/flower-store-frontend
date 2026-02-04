@@ -1,6 +1,8 @@
+'use client';
+
 import { useState } from 'react';
 import { z } from 'zod';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../features/auth/model/authStore';
 import { Container } from '../shared/ui/Container';
 import { Card } from '../shared/ui/Card';
@@ -17,7 +19,7 @@ const schema = z.object({
 });
 
 export const RegisterPage = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const register = useAuthStore((state) => state.register);
   const [form, setForm] = useState({
     full_name: '',
@@ -39,7 +41,7 @@ export const RegisterPage = () => {
     try {
       setIsLoading(true);
       await register(form);
-      navigate('/profile');
+      router.push('/profile');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Registration failed.';
       setError(message);

@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useMemo, useState } from 'react';
 import { api } from '../shared/api';
 import { useAuthStore } from '../features/auth/model/authStore';

@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+'use client';
+
+import Link from 'next/link';
 import { Container } from '../shared/ui/Container';
 import { Card } from '../shared/ui/Card';
 import { Button } from '../shared/ui/Button';

@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+'use client';
+
+import Link from 'next/link';
 import type { ProductOut } from '../../../shared/api/types';
 import { Card } from '../../../shared/ui/Card';
 import { Badge } from '../../../shared/ui/Badge';
