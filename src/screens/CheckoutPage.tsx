@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useMemo, useState } from 'react';
 import { api } from '../shared/api';
 import type { PaymentProvider, PaymentStatusOut } from '../shared/api/types';

@@ -1,12 +1,12 @@
 # Flower Store Frontend (FSD)
 
-Production-grade customer-facing storefront built with React + TypeScript following Feature-Sliced Design (FSD).
+Production-grade customer-facing storefront built with Next.js, React, and TypeScript following Feature-Sliced Design (FSD).
 
 ## Project structure (FSD)
 ```
 src/
-  app/            # app shell, providers
-  pages/          # routing-level UI
+  app/            # Next.js App Router routes + app shell
+  screens/        # routing-level UI
   widgets/        # page sections (navigation, layout)
   features/       # auth, cart, checkout, messages
   entities/       # domain entities (product, order, payment, user)
@@ -16,8 +16,8 @@ src/
 ## Environment variables
 Create a `.env` file based on `.env.example`:
 ```
-VITE_API_BASE_URL=https://flower-store-backend-kappa.vercel.app
-VITE_API_TIMEOUT_MS=10000
+NEXT_PUBLIC_API_BASE_URL=https://flower-store-backend-kappa.vercel.app
+NEXT_PUBLIC_API_TIMEOUT_MS=10000
 ```
 
 ## Local development
@@ -29,7 +29,7 @@ npm run dev
 ## Build
 ```bash
 npm run build
-npm run preview
+npm run start
 ```
 
 ## Security choices
@@ -39,4 +39,4 @@ npm run preview
 
 ## Deployment (Vercel)
 - Add the environment variables from `.env.example` in Vercel project settings.
-- Run `npm run build` in the build step (Vercel defaults work for Vite).
+- Run `npm run build` in the build step and `npm run start` for the server.

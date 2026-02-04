@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'next/navigation';
 import { api } from '../shared/api';
 import { useAsync } from '../shared/hooks/useAsync';
 import { Container } from '../shared/ui/Container';
@@ -11,7 +13,8 @@ import { formatCurrency } from '../shared/lib/format';
 import { useCartStore } from '../features/cart/model/cartStore';
 
 export const ProductDetailsPage = () => {
-  const { id } = useParams();
+  const params = useParams<{ id: string }>();
+  const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
   const { data, error, isLoading, execute } = useAsync(api.products.list);
   const addItem = useCartStore((state) => state.addItem);
 

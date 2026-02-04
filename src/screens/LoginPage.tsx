@@ -1,6 +1,8 @@
+'use client';
+
 import { useState } from 'react';
 import { z } from 'zod';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../features/auth/model/authStore';
 import { Container } from '../shared/ui/Container';
 import { Card } from '../shared/ui/Card';
@@ -14,7 +16,7 @@ const schema = z.object({
 });
 
 export const LoginPage = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const login = useAuthStore((state) => state.login);
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +32,7 @@ export const LoginPage = () => {
     try {
       setIsLoading(true);
       await login(form);
-      navigate('/profile');
+      router.push('/profile');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Login failed.';
       setError(message);
