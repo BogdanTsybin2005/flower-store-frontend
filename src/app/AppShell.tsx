@@ -6,23 +6,36 @@ import Link from "next/link";
 import { Navigation } from "../widgets/layout/Navigation";
 import { useAuthStore } from "../features/auth/model/authStore";
 import { useCartStore } from "../features/cart/model/cartStore";
+import { useLanguageStore, useTranslations } from "../shared/i18n";
+import { LanguageSwitcher } from "../shared/ui/LanguageSwitcher";
 
 interface AppShellProps {
   children: ReactNode;
 }
 
 export const AppShell = ({ children }: AppShellProps) => {
-  const hydrateAuth = useAuthStore((state) => state.hydrate);
-  const hydrateCart = useCartStore((state) => state.hydrate);
-
+  const { t } = useTranslations();
   useEffect(() => {
-    hydrateAuth();
-    hydrateCart();
-  }, [hydrateAuth, hydrateCart]);
+    // Hydrate all stores on client-side mount
+    useAuthStore.getState().hydrate();
+    useCartStore.getState().hydrate();
+    useLanguageStore.getState().hydrate();
+  }, []);
 
   return (
     <div className="app-shell">
-      <Navigation />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0 1rem",
+          borderBottom: "1px solid #eee",
+        }}
+      >
+        <Navigation />
+        <LanguageSwitcher />
+      </div>
       <main className="main">{children}</main>
       <footer
         className="footer"
@@ -42,38 +55,40 @@ export const AppShell = ({ children }: AppShellProps) => {
           }}
         >
           <div>
-            <h4>Company</h4>
+            <h4>{t("footer.company")}</h4>
             <ul style={{ listStyle: "none", padding: 0 }}>
               <li>
-                <Link href="/about">About Us</Link>
+                <Link href="/about">{t("footer.about")}</Link>
               </li>
               <li>
-                <Link href="/faq">FAQ</Link>
+                <Link href="/faq">{t("footer.faq")}</Link>
               </li>
               <li>
-                <Link href="/contact">Contact</Link>
+                <Link href="/contact">{t("footer.contact")}</Link>
               </li>
             </ul>
           </div>
           <div>
-            <h4>Legal</h4>
+            <h4>{t("footer.legal")}</h4>
             <ul style={{ listStyle: "none", padding: 0 }}>
               <li>
-                <Link href="/terms">Terms of Service</Link>
+                <Link href="/terms">{t("footer.terms")}</Link>
               </li>
               <li>
-                <Link href="/privacy">Privacy Policy</Link>
+                <Link href="/privacy">{t("footer.privacy")}</Link>
               </li>
             </ul>
           </div>
           <div>
-            <h4>Support</h4>
+            <h4>{t("footer.support")}</h4>
             <ul style={{ listStyle: "none", padding: 0 }}>
               <li>
-                <Link href="/messages">Chat with Support</Link>
+                <Link href="/messages">{t("footer.chatSupport")}</Link>
               </li>
               <li>
-                <a href="mailto:support@flowerstore.com">Email Us</a>
+                <a href="mailto:support@flowerstore.com">
+                  {t("footer.emailUs")}
+                </a>
               </li>
             </ul>
           </div>
@@ -88,7 +103,7 @@ export const AppShell = ({ children }: AppShellProps) => {
             fontSize: "0.9rem",
           }}
         >
-          Fresh flowers delivered with care. © 2026 Flower Store.
+          {t("footer.copyright")}
         </div>
       </footer>
     </div>

@@ -1,27 +1,29 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { api } from '../shared/api';
-import { useAuthStore } from '../features/auth/model/authStore';
-import { Container } from '../shared/ui/Container';
-import { Card } from '../shared/ui/Card';
-import { TextArea } from '../shared/ui/TextArea';
-import { Button } from '../shared/ui/Button';
-import { Alert } from '../shared/ui/Alert';
-import { Loader } from '../shared/ui/Loader';
-import { createUuid } from '../shared/lib/uuid';
+import { useEffect, useState } from "react";
+import { api } from "../shared/api";
+import { useAuthStore } from "../features/auth/model/authStore";
+import { useTranslations } from "../shared/i18n";
+import { Container } from "../shared/ui/Container";
+import { Card } from "../shared/ui/Card";
+import { TextArea } from "../shared/ui/TextArea";
+import { Button } from "../shared/ui/Button";
+import { Alert } from "../shared/ui/Alert";
+import { Loader } from "../shared/ui/Loader";
+import { createUuid } from "../shared/lib/uuid";
 
-const SESSION_KEY = 'flower-store-session-id';
+const SESSION_KEY = "flower-store-session-id";
 
 export const MessagesPage = () => {
   const { token, isAuthenticated, userId } = useAuthStore();
-  const [message, setMessage] = useState('');
+  const { t } = useTranslations();
+  const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [messages, setMessages] = useState<Array<{ id: string; content: string; is_from_client: boolean }>>(
-    []
-  );
-  const [sessionId, setSessionId] = useState<string>('');
+  const [messages, setMessages] = useState<
+    Array<{ id: string; content: string; is_from_client: boolean }>
+  >([]);
+  const [sessionId, setSessionId] = useState<string>("");
 
   useEffect(() => {
     const existing = localStorage.getItem(SESSION_KEY);
@@ -41,7 +43,8 @@ export const MessagesPage = () => {
       const data = await api.messages.list(token);
       setMessages(data);
     } catch (err) {
-      const messageText = err instanceof Error ? err.message : 'Unable to load messages.';
+      const messageText =
+        err instanceof Error ? err.message : "Unable to load messages.";
       setError(messageText);
     } finally {
       setIsLoading(false);
@@ -57,7 +60,7 @@ export const MessagesPage = () => {
   const handleSend = async () => {
     if (!token) return;
     if (!message.trim()) {
-      setError('Please enter a message.');
+      setError(t("messages.placeholder"));
       return;
     }
     setError(null);
@@ -69,12 +72,13 @@ export const MessagesPage = () => {
           content: message,
           client_id: userId ?? null,
         },
-        token
+        token,
       );
       setMessages((prev) => [...prev, response]);
-      setMessage('');
+      setMessage("");
     } catch (err) {
-      const messageText = err instanceof Error ? err.message : 'Unable to send message.';
+      const messageText =
+        err instanceof Error ? err.message : "Unable to send message.";
       setError(messageText);
     } finally {
       setIsLoading(false);
@@ -100,7 +104,13 @@ export const MessagesPage = () => {
       <Card className="stack">
         {messages.length === 0 && <p>No messages yet.</p>}
         {messages.map((msg) => (
-          <div key={msg.id} className="inline" style={{ justifyContent: msg.is_from_client ? 'flex-end' : 'flex-start' }}>
+          <div
+            key={msg.id}
+            className="inline"
+            style={{
+              justifyContent: msg.is_from_client ? "flex-end" : "flex-start",
+            }}
+          >
             <span>{msg.content}</span>
           </div>
         ))}

@@ -1,37 +1,43 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Container } from '../shared/ui/Container';
-import { Card } from '../shared/ui/Card';
-import { Button } from '../shared/ui/Button';
-import { Input } from '../shared/ui/Input';
-import { formatCurrency } from '../shared/lib/format';
-import { calculateSubtotal } from '../shared/lib/cart';
-import { useCartStore } from '../features/cart/model/cartStore';
+import Link from "next/link";
+import { Container } from "../shared/ui/Container";
+import { Card } from "../shared/ui/Card";
+import { Button } from "../shared/ui/Button";
+import { Input } from "../shared/ui/Input";
+import { useTranslations } from "../shared/i18n";
+import { formatCurrency } from "../shared/lib/format";
+import { calculateSubtotal } from "../shared/lib/cart";
+import { useCartStore } from "../features/cart/model/cartStore";
 
 export const CartPage = () => {
   const { items, updateItem, removeItem } = useCartStore();
+  const { t } = useTranslations();
   const subtotal = calculateSubtotal(items);
 
   return (
     <Container className="stack">
-      <h1>Your cart</h1>
+      <h1>{t("cart.title")}</h1>
       {items.length === 0 && (
         <Card className="stack">
-          <p>Your cart is empty.</p>
-          <Link href="/">Browse products</Link>
+          <p>{t("cart.empty")}</p>
+          <Link href="/">{t("cart.browseProducts")}</Link>
         </Card>
       )}
       {items.map((item) => (
         <Card className="stack" key={item.product.id}>
-          <div className="inline" style={{ justifyContent: 'space-between' }}>
+          <div className="inline" style={{ justifyContent: "space-between" }}>
             <strong>{item.product.name}</strong>
-            <Button onClick={() => removeItem(item.product.id)}>Remove</Button>
+            <Button onClick={() => removeItem(item.product.id)}>
+              {t("cart.remove")}
+            </Button>
           </div>
-          <p className="muted">{formatCurrency(item.product.price_cents, item.product.currency)}</p>
+          <p className="muted">
+            {formatCurrency(item.product.price_cents, item.product.currency)}
+          </p>
           <div className="inline">
             <label>
-              Quantity
+              {t("cart.quantity")}
               <Input
                 type="number"
                 min={1}
@@ -46,8 +52,10 @@ export const CartPage = () => {
       ))}
       {items.length > 0 && (
         <Card className="stack">
-          <strong>Subtotal: {formatCurrency(subtotal)}</strong>
-          <Link href="/checkout">Proceed to checkout</Link>
+          <strong>
+            {t("cart.subtotal")} {formatCurrency(subtotal)}
+          </strong>
+          <Link href="/checkout">{t("cart.proceedCheckout")}</Link>
         </Card>
       )}
     </Container>

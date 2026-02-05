@@ -1,14 +1,15 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { z } from 'zod';
-import { useRouter } from 'next/navigation';
-import { useAuthStore } from '../features/auth/model/authStore';
-import { Container } from '../shared/ui/Container';
-import { Card } from '../shared/ui/Card';
-import { Input } from '../shared/ui/Input';
-import { Button } from '../shared/ui/Button';
-import { Alert } from '../shared/ui/Alert';
+import { useState } from "react";
+import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "../features/auth/model/authStore";
+import { useTranslations } from "../shared/i18n";
+import { Container } from "../shared/ui/Container";
+import { Card } from "../shared/ui/Card";
+import { Input } from "../shared/ui/Input";
+import { Button } from "../shared/ui/Button";
+import { Alert } from "../shared/ui/Alert";
 
 const schema = z.object({
   full_name: z.string().min(2),
@@ -21,12 +22,13 @@ const schema = z.object({
 export const RegisterPage = () => {
   const router = useRouter();
   const register = useAuthStore((state) => state.register);
+  const { t } = useTranslations();
   const [form, setForm] = useState({
-    full_name: '',
-    email: '',
-    password: '',
-    phone: '',
-    address: '',
+    full_name: "",
+    email: "",
+    password: "",
+    phone: "",
+    address: "",
   });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,15 +37,16 @@ export const RegisterPage = () => {
     setError(null);
     const result = schema.safeParse(form);
     if (!result.success) {
-      setError(result.error.errors[0]?.message ?? 'Invalid input.');
+      setError(result.error.errors[0]?.message ?? "Invalid input.");
       return;
     }
     try {
       setIsLoading(true);
       await register(form);
-      router.push('/profile');
+      router.push("/profile");
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Registration failed.';
+      const message =
+        err instanceof Error ? err.message : "Registration failed.";
       setError(message);
     } finally {
       setIsLoading(false);
@@ -53,47 +56,57 @@ export const RegisterPage = () => {
   return (
     <Container className="stack">
       <Card className="stack">
-        <h1>Create your account</h1>
+        <h1>{t("auth.register")}</h1>
         {error && <Alert>{error}</Alert>}
         <label>
-          Full name
+          {t("auth.name")}
           <Input
             value={form.full_name}
-            onChange={(event) => setForm({ ...form, full_name: event.target.value })}
+            onChange={(event) =>
+              setForm({ ...form, full_name: event.target.value })
+            }
           />
         </label>
         <label>
-          Email
+          {t("auth.email")}
           <Input
             type="email"
             value={form.email}
-            onChange={(event) => setForm({ ...form, email: event.target.value })}
+            onChange={(event) =>
+              setForm({ ...form, email: event.target.value })
+            }
           />
         </label>
         <label>
-          Password
+          {t("auth.password")}
           <Input
             type="password"
             value={form.password}
-            onChange={(event) => setForm({ ...form, password: event.target.value })}
+            onChange={(event) =>
+              setForm({ ...form, password: event.target.value })
+            }
           />
         </label>
         <label>
           Phone
           <Input
             value={form.phone}
-            onChange={(event) => setForm({ ...form, phone: event.target.value })}
+            onChange={(event) =>
+              setForm({ ...form, phone: event.target.value })
+            }
           />
         </label>
         <label>
           Address
           <Input
             value={form.address}
-            onChange={(event) => setForm({ ...form, address: event.target.value })}
+            onChange={(event) =>
+              setForm({ ...form, address: event.target.value })
+            }
           />
         </label>
         <Button onClick={() => void handleSubmit()} disabled={isLoading}>
-          {isLoading ? 'Creating...' : 'Register'}
+          {isLoading ? t("common.loading") : t("auth.register")}
         </Button>
       </Card>
     </Container>

@@ -65,11 +65,7 @@ export default function OrderDetailPage() {
       {!isLoading && !error && order && (
         <div className="stack">
           <Card className="stack">
-            <h2>Order #{order.id}</h2>
-            <p>
-              <strong>Date:</strong>{" "}
-              {new Date(order.created_at).toLocaleDateString()}
-            </p>
+            <h2>Order #{order.order_number ?? order.id}</h2>
             <p>
               <strong>Status:</strong> {order.status}
             </p>
@@ -79,31 +75,7 @@ export default function OrderDetailPage() {
           </Card>
           <Card className="stack">
             <h3>Items</h3>
-            {order.items && order.items.length > 0 ? (
-              <ul style={{ listStyle: "none", padding: 0 }}>
-                {order.items.map((item, idx) => (
-                  <li
-                    key={idx}
-                    style={{
-                      padding: "0.5rem 0",
-                      borderBottom: "1px solid #eee",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <span>{item.product_name}</span>
-                      <span>x{item.quantity}</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No items found.</p>
-            )}
+            <p className="muted">Order items information not available.</p>
           </Card>
         </div>
       )}

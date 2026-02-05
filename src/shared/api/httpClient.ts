@@ -18,7 +18,7 @@ export interface RequestOptions extends RequestInit {
 
 const timeoutFetch = async (input: RequestInfo | URL, init: RequestInit) => {
   const controller = new AbortController();
-  const timeoutId = window.setTimeout(() => controller.abort(), ENV.API_TIMEOUT_MS);
+  const timeoutId = window.setTimeout(() => controller.abort(new DOMException('Request timeout', 'AbortError')), ENV.API_TIMEOUT_MS);
 
   try {
     const response = await fetch(input, { ...init, signal: controller.signal });
