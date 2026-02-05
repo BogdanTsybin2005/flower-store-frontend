@@ -32,7 +32,28 @@ export const request = async <T>(
   path: string,
   { authToken, headers, ...init }: RequestOptions = {}
 ): Promise<T> => {
-  const url = `${ENV.API_BASE_URL}${path}`;
+  // Use public NEXT_PUBLIC_API_BASE_URL injected by Next.js at build time.
+  // Prefer process.env so the value is inlined into the client bundle.
+  const base = (process.env.NEXT_PUBLIC_API_BASE_URL as string) ?? ENV.API_BASE_URL ?? '';
+
+  if (!base) {
+    // Clear, actionable error to avoid silent fallback to relative requests (which hit Next.js and return 404).
+    // Do not hardcode a production URL here — fix the environment instead.
+    // eslint-disable-next-line no-console
+    console.error(
+      'Missing API base URL: set NEXT_PUBLIC_API_BASE_URL in .env.local and restart the dev server.'
+    );
+    throw new ApiError(
+      'Missing API base URL. Configure NEXT_PUBLIC_API_BASE_URL and restart the dev server.',
+      0
+    );
+  }
+
+  const url = `${base}${path}`;
+  // DEBUG: log base and request URL to help diagnose env loading issues
+  // (remove this log once env is confirmed working)
+  // eslint-disable-next-line no-console
+  console.log('API Request:', url, 'ENV.API_BASE_URL=', ENV.API_BASE_URL, 'usedBase=', base);
   const response = await timeoutFetch(url, {
     ...init,
     headers: {

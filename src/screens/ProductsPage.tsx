@@ -25,11 +25,16 @@ export const ProductsPage = () => {
       </div>
       {isLoading && <Loader />}
       {error && <Alert>{error}</Alert>}
-      <div className="grid grid-3">
-        {data?.map((product) => (
-          <ProductCard key={product.id} product={product} onAddToCart={addItem} />
-        ))}
-      </div>
+      {!isLoading && !error && (!data || data.length === 0) && (
+        <Alert>No flowers available at the moment. Please check back later!</Alert>
+      )}
+      {!isLoading && !error && data && data.length > 0 && (
+        <div className="grid grid-3">
+          {data.map((product) => (
+            <ProductCard key={product.id} product={product} onAddToCart={addItem} />
+          ))}
+        </div>
+      )}
     </Container>
   );
 };

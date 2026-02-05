@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '../shared/api';
 import { useAuthStore } from '../features/auth/model/authStore';
 import { Container } from '../shared/ui/Container';
@@ -21,13 +21,17 @@ export const MessagesPage = () => {
   const [messages, setMessages] = useState<Array<{ id: string; content: string; is_from_client: boolean }>>(
     []
   );
+  const [sessionId, setSessionId] = useState<string>('');
 
-  const sessionId = useMemo(() => {
+  useEffect(() => {
     const existing = localStorage.getItem(SESSION_KEY);
-    if (existing) return existing;
-    const next = createUuid();
-    localStorage.setItem(SESSION_KEY, next);
-    return next;
+    if (existing) {
+      setSessionId(existing);
+    } else {
+      const next = createUuid();
+      localStorage.setItem(SESSION_KEY, next);
+      setSessionId(next);
+    }
   }, []);
 
   const loadMessages = async () => {

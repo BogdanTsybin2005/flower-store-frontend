@@ -22,7 +22,7 @@ export const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
       <p className="muted">{product.description || 'Fresh seasonal blooms.'}</p>
       <strong>{formatCurrency(product.price_cents, product.currency)}</strong>
       <div className="inline">
-        <Link to={`/products/${product.id}`}>View details</Link>
+        <Link href={`/products/${product.id}`}>View details</Link>
         <Button onClick={() => onAddToCart(product)}>Add to cart</Button>
       </div>
     </Card>

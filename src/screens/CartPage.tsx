@@ -19,7 +19,7 @@ export const CartPage = () => {
       {items.length === 0 && (
         <Card className="stack">
           <p>Your cart is empty.</p>
-          <Link to="/">Browse products</Link>
+          <Link href="/">Browse products</Link>
         </Card>
       )}
       {items.map((item) => (
@@ -47,7 +47,7 @@ export const CartPage = () => {
       {items.length > 0 && (
         <Card className="stack">
           <strong>Subtotal: {formatCurrency(subtotal)}</strong>
-          <Link to="/checkout">Proceed to checkout</Link>
+          <Link href="/checkout">Proceed to checkout</Link>
         </Card>
       )}
     </Container>
